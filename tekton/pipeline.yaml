@@ -4,7 +4,7 @@
 #   - flake8
 #
 ---
-aapiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: cd-pipeline
@@ -58,4 +58,18 @@ spec:
       - name: args
         value: "-v --with-spec --spec-color"
       runAfter:
-        - clone
+        - lint
+
+    - name: build
+      workspaces:
+        - name: source
+          workspace: pipeline-workspace
+      taskRef:
+        name: buildah
+        kind: ClusterTask
+      params:
+      - name: IMAGE
+        value: "$(params.build-image)"
+      runAfter:
+        - tests
+        - lint
