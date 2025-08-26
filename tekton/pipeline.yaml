@@ -13,8 +13,14 @@ spec:
     - name: pipeline-workspace
   params:
     - name: repo-url
+      description: Git repository URL
     - name: branch
+      description: Git branch to checkout
       default: main
+    - name: build-image
+      description: Target image to build
+      type: string
+
   tasks:
     - name: clone
       workspaces:
